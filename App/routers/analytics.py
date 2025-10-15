@@ -33,6 +33,7 @@ def earnings_mumbai_last_month(session: Session = Depends(get_session)):
 
     stmt = (
         select(func.coalesce(func.sum(Payments.amount), 0.0))
+        .select_from(Orders)
         .join(Payments, Payments.transaction_id == Orders.transaction_id)
         .join(Restaurants, Restaurants.restaurant_id == Orders.restaurant_id)
         .where(Payments.status == PaymentStatus.PASS)
@@ -50,6 +51,7 @@ def earnings_veg_bangalore(session: Session = Depends(get_session)):
     veg_items = [OrderFoodItem.VEG_MANCHURIAN, OrderFoodItem.VEG_FRIED_RICE]
     stmt = (
         select(func.coalesce(func.sum(Payments.amount), 0.0))
+        .select_from(Orders)
         .join(Payments, Payments.transaction_id == Orders.transaction_id)
         .join(Restaurants, Restaurants.restaurant_id == Orders.restaurant_id)
         .where(Payments.status == PaymentStatus.PASS)
@@ -86,6 +88,7 @@ def daily_revenue(session: Session = Depends(get_session)):
             Restaurants.area,
             func.coalesce(func.sum(Payments.amount), 0.0).label("total_amount"),
         )
+        .select_from(Orders)
         .join(Payments, Payments.transaction_id == Orders.transaction_id)
         .join(Restaurants, Restaurants.restaurant_id == Orders.restaurant_id)
         .where(Payments.status == PaymentStatus.PASS)

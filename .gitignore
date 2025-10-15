@@ -1,1 +1,4 @@
 .env
+App/routers/__pycache__/
+App/__pycache__/
+database.db
